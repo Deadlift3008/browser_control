@@ -30,10 +30,12 @@ function setUpRecognition() {
 }
 
 function applyText(string) {
-    const text = getLast(string.trim().toLowerCase().split(/-|\s/));
+    const splitted = string.trim().toLowerCase().split(/-|\s/);
 
     map.forEach(item => {
         item.keywords.forEach(keyword => {
+            const text = getLastElems(splitted, keyword.length);
+
             if (text.indexOf(keyword) !== -1) {
                 item.action();
             }
@@ -41,8 +43,8 @@ function applyText(string) {
     });
 }
 
-function getLast(array) {
-    return array[array.length - 1];
+function getLastElems(array, count) {
+    return array.slice(array.length - count - 1).join(' ');
 }
 
 const map = [
@@ -82,4 +84,10 @@ const map = [
             window.recognition.abort();
         }
     },
+    {
+        keywords: ['открой ютуб', 'открой youtube'],
+        action: function() {
+            window.open('https://youtube.com');
+        }
+    }
 ];
