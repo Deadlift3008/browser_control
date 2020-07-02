@@ -20,10 +20,15 @@ function setUpRecognition() {
 
     recognition.onresult = function(recogEvent) {
         const { resultIndex } = recogEvent;
-        const result = recogEvent.results[resultIndex][0].transcript;
+        const { confidence, transcript: result } = recogEvent.results[resultIndex][0];
+        // const { isFinal } = recogEvent.results[resultIndex];
 
+        // TODO: ввести сессию, ориентируясь на isFinal,
+        //  прослеживать чтобы в сессии только один раз применялась команда
         console.log(result);
-        applyText(result);
+        if (confidence > 0.8) {
+            applyText(result);
+        }
     }
 
     window.recognition = recognition;
@@ -85,9 +90,43 @@ const map = [
         }
     },
     {
-        keywords: ['открой ютуб', 'открой youtube'],
+        keywords: ['открой ютуб', 'открой youtube', 'открой ютабе'],
         action: function() {
             window.open('https://youtube.com');
+        }
+    },
+    {
+        keywords: ['открой контакт', 'открой вк', 'открой вэка', 'открой вконтакт', 'открой вконтакте', 'открой vkontakte', 'открой vk'],
+        action: function() {
+            window.open('https://vk.com/');
+        }
+    },
+    {
+        keywords: ['открой джимейл', 'открой gmail', 'открой гмейл'],
+        action: function() {
+            window.open('https://mail.google.com/');
+        }
+    },
+    {
+        // keywords: ['скроль вниз', 'скролл вниз', 'скрол вниз'],
+        keywords: ['вниз', 'в низ'],
+        action: function() {
+            window.scroll({
+                top: window.scrollY + 300,
+                left: 0,
+                behavior: 'smooth'
+            });
+        }
+    },
+    {
+        // keywords: ['скроль вверх', 'скролл вверх', 'скрол вверх', 'скролл верх', 'скрол верх', 'скрол верх'],
+        keywords: ['вверх', 'в верх', 'верх'],
+        action: function() {
+            window.scroll({
+                top: window.scrollY - 300,
+                left: 0,
+                behavior: 'smooth'
+            });
         }
     }
 ];
