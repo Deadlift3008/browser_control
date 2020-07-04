@@ -16,19 +16,14 @@ function setUpRecognition() {
     const recognition = new webkitSpeechRecognition();
     recognition.continuous = true;
     recognition.lang = 'ru-RU';
-    recognition.interimResults = true;
+    // recognition.interimResults = true;
 
     recognition.onresult = function(recogEvent) {
         const { resultIndex } = recogEvent;
-        const { confidence, transcript: result } = recogEvent.results[resultIndex][0];
-        // const { isFinal } = recogEvent.results[resultIndex];
+        const { transcript: result } = recogEvent.results[resultIndex][0];
 
-        // TODO: ввести сессию, ориентируясь на isFinal,
-        //  прослеживать чтобы в сессии только один раз применялась команда
         console.log(result);
-        if (confidence > 0.8) {
-            applyText(result);
-        }
+        applyText(result);
     }
 
     window.recognition = recognition;
@@ -108,8 +103,7 @@ const map = [
         }
     },
     {
-        // keywords: ['скроль вниз', 'скролл вниз', 'скрол вниз'],
-        keywords: ['вниз', 'в низ'],
+        keywords: ['скроль вниз', 'скролл вниз', 'скрол вниз'],
         action: function() {
             window.scroll({
                 top: window.scrollY + 300,
@@ -119,14 +113,50 @@ const map = [
         }
     },
     {
-        // keywords: ['скроль вверх', 'скролл вверх', 'скрол вверх', 'скролл верх', 'скрол верх', 'скрол верх'],
-        keywords: ['вверх', 'в верх', 'верх'],
+        keywords: [
+            'скроль вверх', 
+            'скролл вверх',
+            'скрол вверх',
+            'скролл верх',
+            'скрол верх',
+            'скрол верх',
+            'скрол наверх',
+            'скролл наверх',
+            'скрол на верх',
+            'скролл на верх',
+            'скрол на вверх',
+            'скролл на вверх'
+        ],
         action: function() {
             window.scroll({
                 top: window.scrollY - 300,
                 left: 0,
                 behavior: 'smooth'
             });
+        }
+    },
+    {
+        keywords: ['закрой вкладку', 'закрыть вкладку'],
+        action: function() {
+            window.close();
+        }
+    },
+    {
+        keywords: ['обнови вкладку', 'обновить вкладку'],
+        action: function() {
+            location.reload();
+        }
+    },
+    {
+        keywords: ['вперед', 'в перед'],
+        action: function() {
+            window.history.forward();
+        }
+    },
+    {
+        keywords: ['назад', 'на зад'],
+        action: function() {
+            window.history.back();
         }
     }
 ];
